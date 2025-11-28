@@ -1,0 +1,24 @@
+# Ignora o diretório node_modules, pois as dependências serão instaladas dentro do contêiner.
+node_modules/
+
+# Ignora o diretório .git e o arquivo .gitignore, que não são necessários na imagem final.
+.git/
+.gitignore
+
+# Ignora arquivos de ambiente local, logs e arquivos de depuração.
+.env
+.tmp/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignora arquivos de cache e configuração de IDEs.
+.nyc_output/
+/coverage
+/.vscode/
+.DS_Store
+
+# EXCLUIR OS ARQUIVOS DE TESTE PLAYWRIGHT DO BUILD DA IMAGEM
+e2e-tests/
+playwright.config.ts

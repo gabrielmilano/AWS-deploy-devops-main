@@ -1,0 +1,46 @@
+name: Deploy HTML com Terraform para AWS ECS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_with_terraform:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.x.x
+
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -auto-approve -var="docker_image=${{ secrets.DOCKER_HUB_USERNAME }}/html-app:latest"
+
+      - name: Obter o DNS do ALB (output do Terraform)
+        id: get_alb_dns
+        working-directory: terraform
+        run: |
+          ALB_DNS=$(terraform output -raw html_app_alb_dns_name)
+          echo "html_app_alb_dns_name=$ALB_DNS" >> $GITHUB_OUTPUT
+
+      - name: Mostrar URL da Aplicação
+        run: |
+          echo "Sua aplicação HTML está disponível em: http://${{ steps.get_alb_dns.outputs.html_app_alb_dns_name }}"
