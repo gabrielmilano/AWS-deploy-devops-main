@@ -42,7 +42,8 @@
   "strapi": {
     "uuid": "319879ee-b666-442c-bb8e-1f29a9b75138"
   },
-  "author": "Gabriel Milano, Cauã Loch, Gabriel Duarte",\n  "pnpm": {
+  "author": "Gabriel Milano, Cauã Loch, Gabriel Duarte",
+    "pnpm": {
     "onlyBuiltDependencies": [
       "sharp",
       "better-sqlite3",
